@@ -6,12 +6,13 @@
 //  Copyright 2010 d3i. All rights reserved.
 //
 
-#import <SDWebImage/SDWebImageDecoder.h>
+#import <SDWebImage/SDImageCoder.h>
 #import <SDWebImage/SDWebImageManager.h>
 #import <SDWebImage/SDWebImageOperation.h>
 #import <AssetsLibrary/AssetsLibrary.h>
 #import "MWPhoto.h"
 #import "MWPhotoBrowser.h"
+#import <SDWebImage/SDWebImage.h>
 
 @interface MWPhoto () {
 
@@ -211,10 +212,10 @@
 // Load from local file
 - (void)_performLoadUnderlyingImageAndNotifyWithWebURL:(NSURL *)url {
     @try {
-        SDWebImageManager *manager = [SDWebImageManager sharedManager];
-        _webImageOperation = [manager downloadImageWithURL:url
-                                                   options:0
-                                                  progress:^(NSInteger receivedSize, NSInteger expectedSize) {
+        //SDWebImageManager *manager = [SDWebImageManager sharedManager];
+        _webImageOperation = [[SDWebImageDownloader sharedDownloader]  downloadImageWithURL:url
+                                                   options:0 context:nil
+                                                  progress:^(NSInteger receivedSize, NSInteger expectedSize, NSURL * _Nullable __strong) {
                                                       if (expectedSize > 0) {
                                                           float progress = receivedSize / (float)expectedSize;
                                                           NSDictionary* dict = [NSDictionary dictionaryWithObjectsAndKeys:
@@ -223,7 +224,7 @@
                                                           [[NSNotificationCenter defaultCenter] postNotificationName:MWPHOTO_PROGRESS_NOTIFICATION object:dict];
                                                       }
                                                   }
-                                                 completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, BOOL finished, NSURL *imageURL) {
+                                                 completed:^(UIImage *image, NSData * _Nullable __strong, NSError *error, BOOL finished) {
                                                      if (error) {
                                                          MWLog(@"SDWebImage failed to download image: %@", error);
                                                      }
