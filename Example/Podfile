@@ -6,11 +6,11 @@ pod 'SDWebImage', '>= 5.0.0'
 pod "MWPhotoBrowser", :git => 'https://github.com/yifan513/MWPhotoBrowser.git'
 end
 
-target 'MWPhotoBrowser_Tests' do
-  pod "MWPhotoBrowser", :git => 'https://github.com/yifan513/MWPhotoBrowser.git' 
-pod 'SDWebImage', '>= 5.0.0'
-  pod 'Specta'
-  pod 'Expecta'
-  pod 'FBSnapshotTestCase'
-  pod 'Expecta+Snapshots'
-end
+#target 'MWPhotoBrowser_Tests' do
+#  pod "MWPhotoBrowser", :git => 'https://github.com/yifan513/MWPhotoBrowser.git' 
+#  pod 'SDWebImage', '>= 5.0.0'
+#  pod 'Specta'
+#  pod 'Expecta'
+#  pod 'FBSnapshotTestCase'
+#  pod 'Expecta+Snapshots'
+#end
