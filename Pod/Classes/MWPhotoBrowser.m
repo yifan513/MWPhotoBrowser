@@ -1107,9 +1107,9 @@ static void * MWVideoPlayerObservation = &MWVideoPlayerObservation;
 	_previousButton.enabled = (_currentPageIndex > 0);
 	_nextButton.enabled = (_currentPageIndex < numberOfPhotos - 1);
     
-    // Disable action button if there is no image or it's a video
+    // Disable action button if there is no image
     MWPhoto *photo = [self photoAtIndex:_currentPageIndex];
-    if ([photo underlyingImage] == nil || ([photo respondsToSelector:@selector(isVideo)] && photo.isVideo)) {
+    if ([photo underlyingImage] == nil) {
         _actionButton.enabled = NO;
         _actionButton.tintColor = [UIColor clearColor]; // Tint to hide button
     } else {
