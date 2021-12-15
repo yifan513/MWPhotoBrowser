@@ -442,7 +442,7 @@ static void * MWVideoPlayerObservation = &MWVideoPlayerObservation;
 - (void)setNavBarAppearance:(BOOL)animated {
     [self.navigationController setNavigationBarHidden:NO animated:animated];
     UINavigationBar *navBar = self.navigationController.navigationBar;
-    navBar.tintColor = [UIColor blueColor];
+    navBar.tintColor = [UIColor colorWithRed:55.0f/255.0f green:128.0f/255.0f blue:255.0f/255.0f alpha:1.0f];
     navBar.barTintColor = nil;
     navBar.shadowImage = nil;
     navBar.translucent = YES;
