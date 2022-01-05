@@ -131,6 +131,17 @@ static void * MWVideoPlayerObservation = &MWVideoPlayerObservation;
 	
 }
 
++ (CGFloat)IphoneBottomOffset {
+    CGFloat h = 0.0;
+    if (@available(iOS 11, *)) {
+        UIWindow *window = UIApplication.sharedApplication.windows.firstObject;
+        if (window) {
+            h = window.safeAreaInsets.bottom;
+        }
+    }
+    return h;
+}
+
 #pragma mark - View Loading
 
 // Implement viewDidLoad to do additional setup after loading the view, typically from a nib.
@@ -1006,7 +1017,7 @@ static void * MWVideoPlayerObservation = &MWVideoPlayerObservation;
     CGFloat height = 44;
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone &&
         UIInterfaceOrientationIsLandscape(orientation)) height = 32;
-	return CGRectIntegral(CGRectMake(0, self.view.bounds.size.height - height, self.view.bounds.size.width, height));
+	return CGRectIntegral(CGRectMake(0, self.view.bounds.size.height - height - [MWPhotoBrowser IphoneBottomOffset], self.view.bounds.size.width, height));
 }
 
 - (CGRect)frameForCaptionView:(MWCaptionView *)captionView atIndex:(NSUInteger)index {
@@ -1016,6 +1027,7 @@ static void * MWVideoPlayerObservation = &MWVideoPlayerObservation;
                                      pageFrame.size.height - captionSize.height - (_toolbar.superview?_toolbar.frame.size.height:0),
                                      pageFrame.size.width,
                                      captionSize.height);
+    captionFrame.origin.y -= [MWPhotoBrowser IphoneBottomOffset];
     return CGRectIntegral(captionFrame);
 }
 
