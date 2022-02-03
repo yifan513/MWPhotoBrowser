@@ -149,9 +149,6 @@ static void * MWVideoPlayerObservation = &MWVideoPlayerObservation;
     
     // Validate grid settings
     if (_startOnGrid) _enableGrid = YES;
-    if (_enableGrid) {
-        _enableGrid = [_delegate respondsToSelector:@selector(photoBrowser:thumbPhotoAtIndex:)];
-    }
     if (!_enableGrid) _startOnGrid = NO;
 	
 	// View
