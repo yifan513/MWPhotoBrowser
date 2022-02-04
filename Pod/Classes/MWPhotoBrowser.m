@@ -180,8 +180,25 @@ static void * MWVideoPlayerObservation = &MWVideoPlayerObservation;
     if (self.displayNavArrows) {
         NSString *arrowPathFormat = @"MWPhotoBrowser.bundle/UIBarButtonItemArrow%@";
         UIImage *previousButtonImage = [UIImage imageForResourcePath:[NSString stringWithFormat:arrowPathFormat, @"Left"] ofType:@"png" inBundle:[NSBundle bundleForClass:[self class]]];
-        UIImage *nextButtonImage = [UIImage imageForResourcePath:[NSString stringWithFormat:arrowPathFormat, @"Right"] ofType:@"png" inBundle:[NSBundle bundleForClass:[self class]]];
+        if (!previousButtonImage) {
+            if (@available(iOS 13.0, *)) {
+                previousButtonImage = [UIImage systemImageNamed:@"chevron.backward"];
+            } else {
+                // Fallback on earlier versions
+            }
+        }
         _previousButton = [[UIBarButtonItem alloc] initWithImage:previousButtonImage style:UIBarButtonItemStylePlain target:self action:@selector(gotoPreviousPage)];
+        
+        
+        UIImage *nextButtonImage = [UIImage imageForResourcePath:[NSString stringWithFormat:arrowPathFormat, @"Right"] ofType:@"png" inBundle:[NSBundle bundleForClass:[self class]]];
+        if (!nextButtonImage) {
+            if (@available(iOS 13.0, *)) {
+                nextButtonImage = [UIImage systemImageNamed:@"chevron.forward"];
+            } else {
+                // Fallback on earlier versions
+            }
+        }
+        
         _nextButton = [[UIBarButtonItem alloc] initWithImage:nextButtonImage style:UIBarButtonItemStylePlain target:self action:@selector(gotoNextPage)];
     }
     if (self.displayActionButton) {
@@ -251,7 +268,17 @@ static void * MWVideoPlayerObservation = &MWVideoPlayerObservation;
     // Left button - Grid
     if (_enableGrid) {
         hasItems = YES;
-        [items addObject:[[UIBarButtonItem alloc] initWithImage:[UIImage imageForResourcePath:@"MWPhotoBrowser.bundle/UIBarButtonItemGrid" ofType:@"png" inBundle:[NSBundle bundleForClass:[self class]]] style:UIBarButtonItemStylePlain target:self action:@selector(showGridAnimated)]];
+        UIImage *img = [UIImage imageForResourcePath:@"MWPhotoBrowser.bundle/UIBarButtonItemGrid" ofType:@"png" inBundle:[NSBundle bundleForClass:[self class]]];
+        if (!img) {
+            if (@available(iOS 13.0, *)) {
+                img = [UIImage systemImageNamed:@"rectangle.split.3x3.fill"];
+            } else {
+                // Fallback on earlier versions
+            }
+        }
+        
+        
+        [items addObject:[[UIBarButtonItem alloc] initWithImage:img style:UIBarButtonItemStylePlain target:self action:@selector(showGridAnimated)]];
     } else {
         [items addObject:fixedSpace];
     }
@@ -833,8 +860,27 @@ static void * MWVideoPlayerObservation = &MWVideoPlayerObservation;
             // Add play button if needed
             if (page.displayingVideo) {
                 UIButton *playButton = [UIButton buttonWithType:UIButtonTypeCustom];
-                [playButton setImage:[UIImage imageForResourcePath:@"MWPhotoBrowser.bundle/PlayButtonOverlayLarge" ofType:@"png" inBundle:[NSBundle bundleForClass:[self class]]] forState:UIControlStateNormal];
-                [playButton setImage:[UIImage imageForResourcePath:@"MWPhotoBrowser.bundle/PlayButtonOverlayLargeTap" ofType:@"png" inBundle:[NSBundle bundleForClass:[self class]]] forState:UIControlStateHighlighted];
+                
+                UIImage *play = [UIImage imageForResourcePath:@"MWPhotoBrowser.bundle/PlayButtonOverlayLarge" ofType:@"png" inBundle:[NSBundle bundleForClass:[self class]]];
+                if (!play) {
+                    if (@available(iOS 13.0, *)) {
+                        play = [UIImage systemImageNamed:@"play.circle.fill"];
+                    } else {
+                        // Fallback on earlier versions
+                    }
+                }
+                [playButton setImage:play forState:UIControlStateNormal];
+                
+                
+                UIImage *playtap = [UIImage imageForResourcePath:@"MWPhotoBrowser.bundle/PlayButtonOverlayLargeTap" ofType:@"png" inBundle:[NSBundle bundleForClass:[self class]]];
+                if (!playtap) {
+                    if (@available(iOS 13.0, *)) {
+                        playtap = [UIImage systemImageNamed:@"play.circle"];
+                    } else {
+                        // Fallback on earlier versions
+                    }
+                }
+                [playButton setImage:playtap forState:UIControlStateHighlighted];
                 [playButton addTarget:self action:@selector(playButtonTapped:) forControlEvents:UIControlEventTouchUpInside];
                 [playButton sizeToFit];
                 playButton.frame = [self frameForPlayButton:playButton atIndex:index];
